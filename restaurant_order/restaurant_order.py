@@ -50,7 +50,6 @@ def set_shipped(message):
             break
     mongo_client.restaurant_orders.Order.replace_one({'_id': orders['_id']}, orders)
 
-    
 ###################
 # Flask endpoints
 ###################
@@ -75,12 +74,13 @@ def get_order(order_id):
             o['restaurant_id'] = restaurant_id
             return o, 200
 
-            
 ##############################
 # Main: Run flask, establish subscription
 #######3######################
 if __name__ == '__main__':
     redis_pubsub = redis_conn.pubsub()
+    redis_pubsub.subscribe(**{'restaurantOrder_newOrder': new_order})
+    redis_pubsub.subscribe(**{'restaurantOrder_setPrepared': set_prepared})
+    redis_pubsub.subscribe(**{'restaurantOrder_setShipped': set_shipped})
     redis_pubsub_thread = redis_pubsub.run_in_thread(sleep_time=0.001)
     flask_app.run(host='0.0.0.0', debug=True, port=15000)
-
