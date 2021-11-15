@@ -1,0 +1,5 @@
+pytest
+redis
+requests
+datetime
+random
