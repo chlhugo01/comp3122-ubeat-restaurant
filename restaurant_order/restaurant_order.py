@@ -65,6 +65,8 @@ def get_a_restaurant(restaurant_id):
 def get_order(order_id):
     orders = mongo_client.restaurant_orders.Order \
         .find_one({'order.order_id': order_id}, { '_id': 0})
+    if not orders:
+         return {'error': 'not found'}, 404
     restaurant_id = orders['restaurant_id']
     orders = orders['order']
     for order in orders:
@@ -73,7 +75,7 @@ def get_order(order_id):
             o['restaurant_id'] = restaurant_id
             return o, 200
 
-
+            
 ##############################
 # Main: Run flask, establish subscription
 #######3######################
