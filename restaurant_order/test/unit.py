@@ -43,7 +43,7 @@ def request_order():
 def test_new_order():
     data = json.dumps({
         'order_id': r_id_str,
-        'user_id': 0,
+        'user_id': 1,
         'restaurant_id': 1,
         'food_id': 1
     })
@@ -66,7 +66,7 @@ def test_set_prepared():
     assert response.status_code == 200
     assert response.json() == {
         "customer_id": 1,
-        "deliver": 1,
+        "deliver": 0,
         "food_id": 1,
         "order_id": r_id_str,
         "prepare": 1,
@@ -80,7 +80,7 @@ def test_set_shipped():
     assert response.status_code == 200
     assert response.json() == {
         "customer_id": 1,
-        "deliver": 2,
+        "deliver": 3,
         "food_id": 1,
         "order_id": r_id_str,
         "prepare": 1,
