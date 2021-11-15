@@ -55,6 +55,25 @@ def set_shipped(message):
 # Flask endpoints
 ###################
 
+@flask_app.route('/restaurant/<restaurant_id>', methods=['GET'])
+def get_a_restaurant(restaurant_id):
+    db = mongo_client.restaurant_orders.Order
+    result = list(db.find({'restaurant_id': int(restaurant_id)}, {'_id': 0}))
+    return flask.jsonify(result)
+
+@flask_app.route('/order/<order_id>', methods=['GET'])
+def get_order(order_id):
+    orders = mongo_client.restaurant_orders.Order \
+        .find_one({'order.order_id': order_id}, { '_id': 0})
+    restaurant_id = orders['restaurant_id']
+    orders = orders['order']
+    for order in orders:
+        if order['order_id'] == order_id:
+            o = order
+            o['restaurant_id'] = restaurant_id
+            return o, 200
+
+
 ##############################
 # Main: Run flask, establish subscription
 #######3######################
